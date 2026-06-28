@@ -204,7 +204,7 @@
                     <div class="grid grid-cols-2 gap-2 items-end">
                         <div>
                             <label class="block text-[9px] md:text-[10px] font-bold text-gray-400 mb-1">付款人</label>
-                            <select id="expense-payer" class="w-full text-xs border border-sand-200 rounded-lg px-2.5 py-1.5 bg-sand-50/50 outline-none"></select>
+                            <select id="expense-payer" class="w-full text-xs border border-sand-200 rounded-lg px-2 py-1.5 bg-sand-50/50 outline-none"></select>
                         </div>
                         <div>
                             <label class="block text-[9px] md:text-[10px] font-bold text-gray-400 mb-1">分攤模式</label>
@@ -338,7 +338,7 @@
 
     <!-- JAVASCRIPT LOCAL ENGINE -->
     <script>
-        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz0gDA9x1MFM-LrldA77EDlNXQmaGLbbz7mtSKAPrUjpDWRgKWdVCJzANFshXOzi3Cv/exec"; 
+        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxhGYHQ2joUWD4P0mcdZsIWi2hUO2gnrDlaly3_MIjnOUjo70a4y5oFo1_VpcrkQYeX/exec"; 
         const LOCAL_STORAGE_KEY = 'wanderlust_tokyo_standalone_v1';
 
         // 目前輸入框所選擇的幣別狀態
@@ -350,7 +350,7 @@
             header: { topTag: 'Princess Exhibition Tour 👸🏻🎨', title: 'Tokyo Art & Pingu', desc: '2026 東京特展 ✦ 企鵝咖啡廳與藝術漫遊' },
             sectionTitles: { itinerary: 'Collecting Moments', itinerarySub: 'Capturing the gentle side of life, one step at a time.', splitter: 'Track expenses', splitterSub: 'SMART DEBT RECONCILIATION', checklist: 'Note!!!', checklistSub: 'CHECKLIST & PACKING LIST' },
             members: ['芷嫻', '品元', '秉昱'],
-            expenses: [], // 擴充：每一筆會自帶 currency 欄位
+            expenses: [], // 每一筆會自帶 currency 欄位
             packingList: [
                 { id: 201, text: '手帳本、輕便水彩與簽字筆 🖌️', checked: false },
                 { id: 202, text: '看展輕便小側背包 🎒', checked: false },
@@ -371,6 +371,18 @@
         let db = null;
         let useFirebase = false; 
         let isSyncing = false;
+
+        // 💡 補回儲存核心機制 1：本地快取備份與向雲端 POST 推送同步
+        async function saveState() {
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(appState));
+            await syncWithGAS("post");
+        }
+
+        // 💡 補回儲存核心機制 2：設定更新戳記並寫入
+        async function updateAndSave() {
+            appState.lastUpdated = Date.now();
+            await saveState();
+        }
 
         // 設定目前輸入面板的幣別
         function setCurrency(cur) {
@@ -451,7 +463,7 @@
                 return;
             }
             items.forEach((item) => {
-                let mapHtml = item.mapUrl ? `<a href="${item.mapUrl}" target="_blank" class="inline-flex bg-coral-50 text-coral-600 px-2 py-0.5 rounded-full text-[10px] font-semibold border border-coral-100">🗺️ 地圖</a>` : '';
+                let mapHtml = item.mapUrl ? `<a href="${item.mapUrl}" target="_blank" class="inline-flex bg-coral-50 text-coral-600 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border border-coral-100">🗺️ 地圖</a>` : '';
                 let noteHtml = item.notes ? `<div class="mt-2 pt-1.5 border-t border-dashed border-sand-200 text-[11px] text-coral-500"><span class="font-bold">✦ 小叮嚀：</span>${item.notes}</div>` : '';
                 container.innerHTML += `
                     <div class="relative group itinerary-drag-item px-1" draggable="true" data-id="${item.id}" ondragstart="handleDragStart(event)" ondragover="handleDragOver(event)" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" ondragend="handleDragEnd(event)">
@@ -517,7 +529,6 @@
                 list.innerHTML = `<li class="py-4 text-center text-[10px] text-gray-400 italic">暫時無開銷紀錄。</li>`; return;
             }
             appState.expenses.slice().reverse().forEach(exp => {
-                // 讀取該筆紀錄的幣別，若為空則相容舊資料預設 NT$
                 const currencySymbol = exp.currency || 'NT$';
                 list.innerHTML += `
                     <li class="py-2 flex justify-between items-center text-[11px] gap-2">
@@ -534,14 +545,12 @@
             });
         }
 
-        // 核心智慧分帳優化：分別跑兩套矩陣結算（台幣、日幣分開優化）
         function calculateSettlement() {
             const resultList = document.getElementById('settlement-result-list'); resultList.innerHTML = '';
             if (appState.expenses.length === 0 || appState.members.length === 0) {
                 resultList.innerHTML = `<li class="py-4 text-center text-[10px] text-gray-400 italic font-light">無記帳數據。</li>`; return;
             }
             
-            // 執行分開結算的引擎函式
             let ntdTransactions = runSettlementEngineForCurrency('NT$');
             let jpyTransactions = runSettlementEngineForCurrency('¥');
             
@@ -549,7 +558,6 @@
                 resultList.innerHTML = `<p class="text-xs text-center py-4 font-semibold text-emerald-600">全部金額皆已平帳！</p>`; return;
             }
             
-            // 渲染台幣結算結果
             if (ntdTransactions.length > 0) {
                 resultList.innerHTML += `<div class="text-[10px] font-bold text-gray-400 px-1 pt-1">【NT$ 台幣結算】</div>`;
                 ntdTransactions.forEach(tx => {
@@ -560,7 +568,6 @@
                 });
             }
             
-            // 渲染日幣結算結果
             if (jpyTransactions.length > 0) {
                 resultList.innerHTML += `<div class="text-[10px] font-bold text-ocean-600 px-1 pt-2">【¥ 日圓結算】</div>`;
                 jpyTransactions.forEach(tx => {
@@ -572,14 +579,13 @@
             }
         }
 
-        // 單一幣別結算矩陣計算核心
         function runSettlementEngineForCurrency(targetCurrency) {
             let balances = {}; 
             appState.members.forEach(m => balances[m] = 0);
             
             appState.expenses.forEach(exp => {
-                const expCurrency = exp.currency || 'NT$'; // 相容老資料
-                if (expCurrency !== targetCurrency) return; // 篩選非目標貨幣
+                const expCurrency = exp.currency || 'NT$';
+                if (expCurrency !== targetCurrency) return;
                 
                 const payer = exp.payer;
                 const total = exp.amount;
@@ -672,6 +678,7 @@
             sanitizeAppState(); renderAll();
         }
 
+        // 💡 補回並重構雲端同步雙向引擎：完美支援 get 讀取與 post 寫入推送
         async function syncWithGAS(action = "get") {
             const badge = document.getElementById('cloud-sync-status');
             const txt = document.getElementById('cloud-status-text');
@@ -690,18 +697,51 @@
             txt.innerText = "同步中...";
 
             try {
-                const response = await fetch(GAS_WEB_APP_URL);
-                if (!response.ok) throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
-                const result = await response.json();
-                
-                if (result.status === "success" && result.data) {
-                    importCloudData(result.data);
-                    useFirebase = true;
-                    badge.className = "inline-flex items-center gap-1.5 bg-emerald-500/10 text-emerald-600 text-[9px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-500/20 backdrop-blur-sm";
-                    badge.querySelector('span').className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
-                    txt.innerText = "雲端已同步";
-                } else {
-                    throw new Error(result.message || "GAS 後台解譯失敗");
+                if (action === "get") {
+                    console.log("正在從 Google Sheets 撈取最新資料...");
+                    const response = await fetch(GAS_WEB_APP_URL);
+                    if (!response.ok) throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
+                    const result = await response.json();
+                    
+                    if (result.status === "success" && result.data) {
+                        importCloudData(result.data);
+                        useFirebase = true;
+                        badge.className = "inline-flex items-center gap-1.5 bg-emerald-500/10 text-emerald-600 text-[9px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-500/20 backdrop-blur-sm";
+                        badge.querySelector('span').className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
+                        txt.innerText = "雲端已同步";
+                    } else {
+                        throw new Error(result.message || "GAS 後台解譯失敗");
+                    }
+                } else if (action === "post") {
+                    console.log("正在推送本地資料至 Google Sheets...");
+                    const payload = {
+                        action: "sync_all",
+                        state: {
+                            header: appState.header,
+                            itinerary: appState.itinerary,
+                            members: appState.members,
+                            expenses: appState.expenses,
+                            packingList: appState.packingList,
+                            preTripList: appState.preTripList
+                        }
+                    };
+
+                    const response = await fetch(GAS_WEB_APP_URL, {
+                        method: "POST",
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (!response.ok) throw new Error(`POST 失敗! 狀態碼: ${response.status}`);
+                    
+                    const result = await response.json();
+                    if (result.status === "success") {
+                        useFirebase = true;
+                        badge.className = "inline-flex items-center gap-1.5 bg-emerald-500/10 text-emerald-600 text-[9px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-500/20 backdrop-blur-sm";
+                        badge.querySelector('span').className = "w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse";
+                        txt.innerText = "雲端已同步";
+                    } else {
+                        throw new Error(result.message || "雲端覆寫失敗");
+                    }
                 }
             } catch (error) {
                 console.error("GAS 同步連線異常:", error);
@@ -768,7 +808,7 @@
                         amount: Number(exp.Amount), 
                         payer: exp.Payer, 
                         sharedWith: exp.SharedWith ? exp.SharedWith.split(",") : [],
-                        currency: exp.Currency || 'NT$' // 解析雲端幣別欄位
+                        currency: exp.Currency || 'NT$'
                     }));
                 }
                 if (cloudData.checklist) {
@@ -885,7 +925,6 @@
                 sw.push(cb.value); cs[cb.value] = Math.round(parseFloat(document.getElementById(`custom-amount-${cb.value}`).value)) || 0;
             });
             
-            // 寫入包含當前貨幣幣別的物件
             const expData = { 
                 id: Date.now(), 
                 purpose: p, 
@@ -894,13 +933,13 @@
                 splitMode: document.getElementById('expense-split-mode').value, 
                 customShares: cs, 
                 sharedWith: sw,
-                currency: currentSelectedCurrency // 儲存該筆貨幣種類 
+                currency: currentSelectedCurrency 
             };
             appState.expenses.push(expData); updateAndSave(); cancelExpenseEdit(); renderAll();
         }
         function cancelExpenseEdit() {
             document.getElementById('expense-purpose').value = ''; document.getElementById('expense-amount').value = '';
-            setCurrency('NT$'); // 重置回台幣
+            setCurrency('NT$'); 
             renderSharerCheckboxes();
         }
         function editExpenseItem(id) {
@@ -910,7 +949,6 @@
             document.getElementById('expense-payer').value = exp.payer;
             document.getElementById('expense-split-mode').value = exp.splitMode || 'even';
             
-            // 還原當初儲存的貨幣
             setCurrency(exp.currency || 'NT$');
             
             appState.expenses = appState.expenses.filter(e => e.id !== id);
