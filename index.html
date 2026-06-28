@@ -6,6 +6,7 @@
     <title>Zhian's Trip-0724 Tokyo Art 👸🏻🎨🐧</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👸🏻🎨🐧</text></svg>">
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -68,14 +69,17 @@
 </head>
 <body class="text-sand-800 min-h-screen flex flex-col antialiased pb-24 md:pb-6 break-words">
 
-    <header class="relative overflow-hidden bg-gradient-to-b from-coral-50 via-ocean-50 to-sand-50 pt-8 pb-6 px-4 text-center border-b border-sand-200/50 shadow-sm">
+    <!-- HERO HEADER -->
+    <header class="relative overflow-hidden bg-gradient-to-b from-coral-50 via-ocean-50 to-sand-50 pt-10 pb-6 px-4 text-center border-b border-sand-200/50 shadow-sm">
         
-        <svg class="absolute right-4 bottom-0 opacity-20 pointer-events-none hidden md:block" style="width: 110px; height: 160px;" viewBox="0 0 100 200" fill="none" stroke="#f43f5e" stroke-width="2">
+        <!-- 🗼 東京鐵塔精緻線條素材 (已在手機版優化尺寸，不擋字) -->
+        <svg class="absolute right-2 bottom-0 opacity-15 md:opacity-20 pointer-events-none block" style="width: 70px; height: 110px; --md-width: 110px; --md-height: 160px;" viewBox="0 0 100 200" fill="none" stroke="#f43f5e" stroke-width="2">
             <path d="M50 10 L50 40 M46 40 L54 40 M45 40 L30 190 M55 40 L70 190 M38 90 L62 90 M36 140 L64 140 M42 40 L42 190 M58 40 L58 190 M30 190 L70 190 M40 90 L50 70 L60 90 M25 190 L50 145 L75 190" />
         </svg>
 
-        <div class="absolute left-6 bottom-2 opacity-20 pointer-events-none hidden md:block">
-            <svg style="width: 70px; height: 90px;" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+        <!-- 🐧 療癒極簡 Pingu 企鵝剪影 (已在手機版優化尺寸) -->
+        <div class="absolute left-2 bottom-1 opacity-15 md:opacity-20 pointer-events-none block">
+            <svg style="width: 45px; height: 60px;" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
                 <ellipse cx="50" cy="65" rx="35" ry="45" fill="#0f172a" />
                 <ellipse cx="50" cy="70" rx="22" ry="32" fill="#ffffff" />
                 <circle cx="40" cy="45" r="4" fill="#0f172a" />
@@ -88,6 +92,7 @@
             </svg>
         </div>
 
+        <!-- 🌸 動態櫻花花瓣素材 -->
         <svg class="absolute pointer-events-none animate-sakura-1 text-coral-200" style="top: -10px; left: 15%; width: 14px; height: 14px;" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 21.5c-1.35-3-4.5-6.15-4.5-8.5s2.01-4.25 4.5-4.25 4.5 1.9 4.5 4.25-3.15 5.5-4.5 8.5z"/>
         </svg>
@@ -99,20 +104,22 @@
         </svg>
 
         <div class="absolute top-3 right-3 z-10 flex flex-col items-end gap-1">
+            <!-- ☁️ 雲端同步連線指示燈 -->
             <div id="cloud-sync-status" class="inline-flex items-center gap-1 bg-gray-500/10 text-gray-500 text-[9px] font-bold px-2 py-0.5 rounded-full border border-gray-200/50 backdrop-blur-sm">
                 <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
                 <span id="cloud-status-text">本機儲存</span>
             </div>
             <button onclick="openHeaderModal()" class="bg-white/80 hover:bg-white text-coral-500 text-[9px] font-bold px-2 py-1 rounded-full border border-sand-200/80 shadow-sm transition-all backdrop-blur-sm font-sans">✏️ 編輯</button>
         </div>
-        <div class="max-w-2xl mx-auto px-2">
+        <div class="max-w-2xl mx-auto px-4 relative z-0">
             <span id="display-top-tag" class="text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] text-coral-500 font-bold block mb-1">0724-0726 Trip</span>
-            <h1 id="display-title" class="font-serif text-2.5xl md:text-5xl font-semibold tracking-wide text-sand-800 mb-1 break-words">🇯🇵 Kyoto  ૮₍♡>𖥦< ₎α </h1>
+            <h1 id="display-title" class="font-serif text-2xl md:text-5xl font-semibold tracking-wide text-sand-800 mb-1 break-words">🇯🇵 Kyoto  ૮₍♡>𖥦< ₎α </h1>
             <div class="magazine-line my-2.5 opacity-20"></div>
             <p id="display-desc" class="text-[9px] md:text-[10px] font-medium tracking-[0.2em] md:tracking-[0.25em] text-ocean-600 uppercase">2026 東京快閃小旅行🤍</p>
         </div>
     </header>
 
+    <!-- SPA NAVIGATION BAR -->
     <nav class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-sand-200 py-0.5 shadow-sm">
         <div class="max-w-md mx-auto px-2 flex justify-around">
             <button onclick="switchTab('itinerary')" id="nav-itinerary" class="nav-btn py-2 px-2 text-[11px] md:text-xs font-semibold tracking-wider text-coral-500 border-b-2 border-coral-500 flex items-center gap-1 outline-none font-sans shrink-0">Schedule 📆</button>
@@ -121,7 +128,9 @@
         </div>
     </nav>
 
+    <!-- MAIN CONTAINER -->
     <main class="max-w-4xl w-full mx-auto px-3 py-4 flex-grow">
+        <!-- ================= PAGE 1: 行程頁面 ================= -->
         <section id="page-itinerary" class="page-section space-y-4">
             <div class="text-center max-w-md mx-auto px-2">
                 <h2 id="title-itinerary" class="font-serif text-lg md:text-2xl font-semibold text-sand-800">Collecting Moments 🖼️</h2>
@@ -146,6 +155,7 @@
             </div>
         </section>
 
+        <!-- ================= PAGE 2: 記帳頁面 ================= -->
         <section id="page-splitter" class="page-section hidden space-y-4">
             <div class="text-center max-w-md mx-auto">
                 <h2 id="title-splitter" class="font-serif text-lg md:text-2xl font-semibold text-sand-800">Tokyo Billing 💴</h2>
@@ -216,6 +226,7 @@
             </div>
         </section>
 
+        <!-- ================= PAGE 3: 備忘頁面 ================= -->
         <section id="page-checklist" class="page-section hidden space-y-4">
             <div class="text-center max-w-md mx-auto">
                 <h2 id="title-checklist" class="font-serif text-lg md:text-2xl font-semibold text-sand-800">Note & Packing 🐧</h2>
@@ -248,6 +259,7 @@
         </section>
     </main>
 
+    <!-- Modals -->
     <div id="header-modal" class="fixed inset-0 z-50 flex items-end justify-center bg-sand-800/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 px-2">
         <div class="w-full max-w-md bg-white rounded-t-3xl p-5 space-y-4 shadow-2xl transform translate-y-full transition-transform duration-300 max-h-[90vh] overflow-y-auto no-scrollbar">
             <div class="flex items-center justify-between border-b border-sand-100 pb-2">
@@ -310,6 +322,7 @@
         <span class="text-coral-400">✦</span><span id="toast-message">操作成功！</span>
     </div>
 
+    <!-- JAVASCRIPT LOCAL ENGINE -->
     <script>
         const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz0gDA9x1MFM-LrldA77EDlNXQmaGLbbz7mtSKAPrUjpDWRgKWdVCJzANFshXOzi3Cv/exec"; 
         const LOCAL_STORAGE_KEY = 'wanderlust_tokyo_standalone_v1';
@@ -604,48 +617,18 @@
             txt.innerText = "同步中...";
 
             try {
-                if (action === "get") {
-                    const response = await fetch(GAS_WEB_APP_URL);
-                    if (!response.ok) throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
-                    const result = await response.json();
-                    
-                    if (result.status === "success" && result.data) {
-                        importCloudData(result.data);
-                        useFirebase = true;
-                        badge.className = "inline-flex items-center gap-1.5 bg-emerald-500/10 text-emerald-600 text-[9px] font-bold px-2 py-0.5 rounded-full border border-emerald-500/20 backdrop-blur-sm";
-                        badge.querySelector('span').className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
-                        txt.innerText = "雲端已同步";
-                    } else {
-                        throw new Error(result.message || "GAS 後台解譯失敗");
-                    }
-                } else if (action === "post") {
-                    const payload = {
-                        action: "sync_all",
-                        state: {
-                            header: appState.header,
-                            itinerary: appState.itinerary,
-                            members: appState.members,
-                            expenses: appState.expenses,
-                            packingList: appState.packingList,
-                            preTripList: appState.preTripList
-                        }
-                    };
-
-                    const response = await fetch(GAS_WEB_APP_URL, {
-                        method: "POST",
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    if (!response.ok) throw new Error(`POST 失敗! 狀態碼: ${response.status}`);
-                    const result = await response.json();
-                    if (result.status === "success") {
-                        useFirebase = true;
-                        badge.className = "inline-flex items-center gap-1.5 bg-emerald-500/10 text-emerald-600 text-[9px] font-bold px-2 py-0.5 rounded-full border border-emerald-500/20 backdrop-blur-sm";
-                        badge.querySelector('span').className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
-                        txt.innerText = "雲端已同步";
-                    } else {
-                        throw new Error(result.message || "雲端覆寫失敗");
-                    }
+                const response = await fetch(GAS_WEB_APP_URL);
+                if (!response.ok) throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
+                const result = await response.json();
+                
+                if (result.status === "success" && result.data) {
+                    importCloudData(result.data);
+                    useFirebase = true;
+                    badge.className = "inline-flex items-center gap-1.5 bg-emerald-500/10 text-emerald-600 text-[9px] font-bold px-2 py-0.5 rounded-full border border-emerald-500/20 backdrop-blur-sm";
+                    badge.querySelector('span').className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
+                    txt.innerText = "雲端已同步";
+                } else {
+                    throw new Error(result.message || "GAS 後台解譯失敗");
                 }
             } catch (error) {
                 console.error("GAS 同步連線異常:", error);
