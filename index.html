@@ -69,7 +69,7 @@
 </head>
 <body class="text-sand-800 min-h-screen flex flex-col antialiased pb-24 md:pb-6 break-words">
 
-    <!-- HERO HEADER -->
+    <!-- HERO HEADER (櫻花粉與冰川藍交織的東京天際線) -->
     <header class="relative overflow-hidden bg-gradient-to-b from-coral-50 via-ocean-50 to-sand-50 pt-10 pb-6 px-4 text-center border-b border-sand-200/50 shadow-sm">
         
         <!-- 🗼 東京鐵塔精緻線條素材 -->
@@ -80,13 +80,17 @@
         <!-- 🐧 療癒極簡 Pingu 企鵝剪影 -->
         <div class="absolute left-2 bottom-1 opacity-15 md:opacity-20 pointer-events-none block">
             <svg style="width: 45px; height: 60px;" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                <!-- 企鵝主體 -->
                 <ellipse cx="50" cy="65" rx="35" ry="45" fill="#0f172a" />
                 <ellipse cx="50" cy="70" rx="22" ry="32" fill="#ffffff" />
+                <!-- 眼睛 -->
                 <circle cx="40" cy="45" r="4" fill="#0f172a" />
                 <circle cx="60" cy="45" r="4" fill="#0f172a" />
+                <!-- 嘴巴與腮紅 -->
                 <polygon points="45,51 55,51 50,58" fill="#fb7185" />
                 <circle cx="34" cy="54" r="5" fill="#fecdd3" />
                 <circle cx="66" cy="54" r="5" fill="#fecdd3" />
+                <!-- 腳丫 -->
                 <ellipse cx="35" cy="110" rx="10" ry="5" fill="#fb7185" />
                 <ellipse cx="65" cy="110" rx="10" ry="5" fill="#fb7185" />
             </svg>
@@ -104,7 +108,7 @@
         </svg>
 
         <div class="absolute top-3 right-3 z-10 flex flex-col items-end gap-1">
-            <!-- ☁️ 雲端同步連線指示燈 -->
+            <!-- ☁️ 雲端同步連線指示燈 (乾淨五字版) -->
             <div id="cloud-sync-status" class="inline-flex items-center gap-1 bg-gray-500/10 text-gray-500 text-[9px] font-bold px-2 py-0.5 rounded-full border border-gray-200/50 backdrop-blur-sm">
                 <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
                 <span id="cloud-status-text">本機儲存</span>
@@ -113,7 +117,7 @@
         </div>
         <div class="max-w-2xl mx-auto px-4 relative z-0">
             <span id="display-top-tag" class="text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] text-coral-500 font-bold block mb-1">0724-0726 Trip</span>
-            <h1 id="display-title" class="font-serif text-2xl md:text-5xl font-semibold tracking-wide text-sand-800 mb-1 break-words">🇯🇵 Kyoto  ૮₍♡>𖥦< ₎α </h1>
+            <h1 id="display-title" class="font-serif text-2xl md:text-5xl font-semibold tracking-wide text-sand-800 mb-1 break-words">🇯🇵 Kyoto  ૮₍♡&gt;𖥦&lt; ₎α </h1>
             <div class="magazine-line my-2.5 opacity-20"></div>
             <p id="display-desc" class="text-[9px] md:text-[10px] font-medium tracking-[0.2em] md:tracking-[0.25em] text-ocean-600 uppercase">2026 東京快閃小旅行🤍</p>
         </div>
@@ -175,7 +179,7 @@
                 </div>
                 
                 <div class="bg-white rounded-2xl p-4 md:p-5 border border-sand-200 shadow-sm space-y-3 relative overflow-hidden">
-                    <h3 id="expense-form-title" class="font-serif text-xs md:text-sm font-semibold text-sand-800 flex items-center gap-1.5">✍️ 紀錄</h3>
+                    <h3 id="expense-form-title" class="font-serif text-sm font-semibold text-sand-800 flex items-center gap-1.5">✍️ 紀錄</h3>
                     <input type="hidden" id="edit-expense-id" value="">
                     
                     <!-- 幣別切換區區塊 -->
@@ -204,7 +208,7 @@
                         </div>
                         <div>
                             <label class="block text-[9px] md:text-[10px] font-bold text-gray-400 mb-1">分攤模式</label>
-                            <select id="expense-split-mode" onchange="toggleSplitModeUI()" class="w-full text-xs border border-sand-200 rounded-lg px-2 py-1.5 bg-sand-50/50 outline-none">
+                            <select id="expense-split-mode" onchange="toggleSplitModeUI()" class="w-full text-xs border border-sand-200 rounded-lg px-2.5 py-1.5 bg-sand-50/50 outline-none">
                                 <option value="even">👥 平均分攤</option>
                                 <option value="custom">✍️ 手動金額</option>
                             </select>
@@ -229,7 +233,7 @@
                         <div class="max-h-[220px] overflow-y-auto no-scrollbar"><ul id="expense-history-list" class="divide-y divide-sand-100"></ul></div>
                     </div>
                     <div class="bg-gradient-to-br from-white to-coral-50/20 rounded-2xl p-4 border border-coral-100 shadow-sm">
-                        <h4 class="font-serif text-xs font-semibold text-sand-800 mb-2">✨ 最佳化轉帳結算</h4>
+                        <h4 class="font-serif text-xs font-semibold text-sand-800 mb-3">✨ 最佳化轉帳結算</h4>
                         <div class="max-h-[220px] overflow-y-auto no-scrollbar"><ul id="settlement-result-list" class="space-y-1.5"></ul></div>
                     </div>
                 </div>
@@ -239,7 +243,7 @@
         <!-- ================= PAGE 3: 備忘頁面 ================= -->
         <section id="page-checklist" class="page-section hidden space-y-4">
             <div class="text-center max-w-md mx-auto">
-                <h2 id="title-checklist" class="font-serif text-lg md:text-2xl font-semibold text-sand-800">Note & Packing 🐧</h2>
+                <h2 id="title-checklist" class="font-serif text-lg md:text-2xl font-semibold text-sand-800">Note &amp; Packing 🐧</h2>
                 <p id="sub-checklist" class="text-[9px] md:text-[10px] text-coral-500 font-bold mt-0.5 uppercase tracking-widest">CHECKLIST & PACKING LIST</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto px-1">
@@ -334,7 +338,7 @@
 
     <!-- JAVASCRIPT LOCAL ENGINE -->
     <script>
-        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz0gDA9x1MFM-LrldA77EDlNXQmaGLbbz7mtSKAPrUjpDWRgKWdVCJzANFshXOzi3Cv/exec"; 
+        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz0gDA9x1MFM-LrldA77EDlNXQmaGLbbz7mtSKAPrUjpDWRgKWdVCJzANFshXOzi3Cv/exec"; 
         const LOCAL_STORAGE_KEY = 'wanderlust_tokyo_standalone_v1';
 
         // 目前輸入框所選擇的幣別狀態
@@ -359,13 +363,13 @@
             itinerary: {
                 1: [
                     { id: 1001, time: '10:00 AM', spot: '六本木 ✦ 森美術館 (當期大展) 🖼️', duration: '3 小時', mapUrl: 'https://maps.google.com', notes: '在高空美術館看精彩畫展，順便俯瞰絕美的東京鐵塔街景。' },
-                    { id: 1002, time: '02:30 PM', spot: 'Pingu 企鵝家族限定下午茶 🐧☕', duration: '2 小時', mapUrl: 'https://maps.google.com', notes: '享用超可愛的 Pingu 造型抹茶拿鐵跟特製雪花甜點，拍照留念！' }
+                    { id: 1002, time: '02:30 PM', spot: 'Pingu 企鵝家族限定下午茶 🐧☕', duration: '2 小時', mapUrl: 'https://maps.google.com', notes: '享用超可愛 of Pingu 造型抹茶拿鐵跟特製雪花甜點，拍照留念！' }
                 ]
             }
         };
 
         let db = null;
-        let useFirebase = false; 
+        let useFirebase = false; 
         let isSyncing = false;
 
         // 設定目前輸入面板的幣別
@@ -668,16 +672,6 @@
             sanitizeAppState(); renderAll();
         }
 
-        async function saveState() {
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(appState));
-            await syncWithGAS("post");
-        }
-
-        async function updateAndSave() {
-            appState.lastUpdated = Date.now();
-            await saveState();
-        }
-
         async function syncWithGAS(action = "get") {
             const badge = document.getElementById('cloud-sync-status');
             const txt = document.getElementById('cloud-status-text');
@@ -703,7 +697,7 @@
                 if (result.status === "success" && result.data) {
                     importCloudData(result.data);
                     useFirebase = true;
-                    badge.className = "inline-flex items-center gap-1.5 bg-emerald-500/10 text-emerald-600 text-[9px] font-bold px-2 py-0.5 rounded-full border border-emerald-500/20 backdrop-blur-sm";
+                    badge.className = "inline-flex items-center gap-1.5 bg-emerald-500/10 text-emerald-600 text-[9px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-500/20 backdrop-blur-sm";
                     badge.querySelector('span').className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
                     txt.innerText = "雲端已同步";
                 } else {
@@ -716,7 +710,7 @@
                 if (errorMsg.includes("Failed to fetch")) errorMsg = "連線被拒";
                 else if (errorMsg.includes("Unexpected token")) errorMsg = "回傳網頁錯誤";
                 
-                badge.className = "inline-flex items-center gap-1.5 bg-rose-500/10 text-rose-600 text-[9px] font-bold px-2 py-0.5 rounded-full border border-rose-500/20 backdrop-blur-sm";
+                badge.className = "inline-flex items-center gap-1.5 bg-rose-500/10 text-rose-600 text-[9px] font-bold px-2.5 py-0.5 rounded-full border border-rose-500/20 backdrop-blur-sm";
                 badge.querySelector('span').className = "w-1.5 h-1.5 rounded-full bg-rose-500";
                 txt.innerText = `⚠️ 異常: ${errorMsg}`;
                 loadLocalBackup();
@@ -1006,7 +1000,7 @@
         
         let confirmCb = null;
         function showConfirm(m, cb) { confirmCb = cb; document.getElementById('confirm-modal-text').innerText = m; const modal = document.getElementById('confirm-modal'); modal.classList.remove('opacity-0', 'pointer-events-none'); modal.querySelector('.transform').classList.remove('scale-95'); }
-        function closeConfirm() { document.getElementById('confirm-modal').classList.add('opacity-0', 'pointer-events-none'); document.getElementById('confirm-modal').querySelector('.transform').classList.add('scale-95'); }
+        function closeConfirm() { document.getElementById('confirm-modal').classList.add('opacity-0', 'pointer-events-none'); document.getElementById('confirm-modal-text').innerText = '確定繼續執行嗎？'; document.getElementById('confirm-modal').querySelector('.transform').classList.add('scale-95'); }
         document.getElementById('confirm-cancel').onclick = closeConfirm;
         document.getElementById('confirm-ok').onclick = () => { if (confirmCb) confirmCb(); closeConfirm(); };
 
