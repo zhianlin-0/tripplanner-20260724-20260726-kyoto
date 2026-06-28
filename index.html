@@ -72,12 +72,12 @@
     <!-- HERO HEADER -->
     <header class="relative overflow-hidden bg-gradient-to-b from-coral-50 via-ocean-50 to-sand-50 pt-10 pb-6 px-4 text-center border-b border-sand-200/50 shadow-sm">
         
-        <!-- 🗼 東京鐵塔精緻線條素材 (已在手機版優化尺寸，不擋字) -->
-        <svg class="absolute right-2 bottom-0 opacity-15 md:opacity-20 pointer-events-none block" style="width: 70px; height: 110px; --md-width: 110px; --md-height: 160px;" viewBox="0 0 100 200" fill="none" stroke="#f43f5e" stroke-width="2">
+        <!-- 🗼 東京鐵塔精緻線條素材 -->
+        <svg class="absolute right-2 bottom-0 opacity-15 md:opacity-20 pointer-events-none block" style="width: 70px; height: 110px;" viewBox="0 0 100 200" fill="none" stroke="#f43f5e" stroke-width="2">
             <path d="M50 10 L50 40 M46 40 L54 40 M45 40 L30 190 M55 40 L70 190 M38 90 L62 90 M36 140 L64 140 M42 40 L42 190 M58 40 L58 190 M30 190 L70 190 M40 90 L50 70 L60 90 M25 190 L50 145 L75 190" />
         </svg>
 
-        <!-- 🐧 療癒極簡 Pingu 企鵝剪影 (已在手機版優化尺寸) -->
+        <!-- 🐧 療癒極簡 Pingu 企鵝剪影 -->
         <div class="absolute left-2 bottom-1 opacity-15 md:opacity-20 pointer-events-none block">
             <svg style="width: 45px; height: 60px;" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
                 <ellipse cx="50" cy="65" rx="35" ry="45" fill="#0f172a" />
@@ -177,14 +177,24 @@
                 <div class="bg-white rounded-2xl p-4 md:p-5 border border-sand-200 shadow-sm space-y-3 relative overflow-hidden">
                     <h3 id="expense-form-title" class="font-serif text-xs md:text-sm font-semibold text-sand-800 flex items-center gap-1.5">✍️ 紀錄</h3>
                     <input type="hidden" id="edit-expense-id" value="">
+                    
+                    <!-- 幣別切換區區塊 -->
+                    <div class="flex items-center gap-2 bg-sand-50 p-2 rounded-xl border border-sand-200">
+                        <span class="text-[10px] font-bold text-gray-400">選擇結算結帳幣別：</span>
+                        <div class="inline-flex rounded-lg border border-sand-200 bg-white p-0.5">
+                            <button type="button" id="currency-ntd" onclick="setCurrency('NT$')" class="px-3 py-1 text-xs font-bold rounded-md bg-coral-500 text-white transition-all">NT$</button>
+                            <button type="button" id="currency-jpy" onclick="setCurrency('¥')" class="px-3 py-1 text-xs font-bold rounded-md text-gray-400 transition-all">¥ 日圓</button>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-2">
                         <div>
                             <label class="block text-[9px] md:text-[10px] font-bold text-gray-400 mb-1">開銷品項</label>
                             <input type="text" id="expense-purpose" placeholder="門票..." class="w-full text-xs border border-sand-200 rounded-lg px-2.5 py-1.5 bg-sand-50/50 outline-none">
                         </div>
                         <div>
-                            <label class="block text-[9px] md:text-[10px] font-bold text-gray-400 mb-1">支出總額</label>
-                            <input type="number" id="expense-amount" placeholder="NT$ / ¥" class="w-full text-xs border border-sand-200 rounded-lg px-2.5 py-1.5 bg-sand-50/50 outline-none" oninput="autoDistributeIfEven()">
+                            <label class="block text-[9px] md:text-[10px] font-bold text-gray-400 mb-1">支出總額 (<span id="input-currency-label" class="text-coral-500 font-bold">NT$</span>)</label>
+                            <input type="number" id="expense-amount" placeholder="金額..." class="w-full text-xs border border-sand-200 rounded-lg px-2.5 py-1.5 bg-sand-50/50 outline-none" oninput="autoDistributeIfEven()">
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-2 items-end">
@@ -201,7 +211,7 @@
                         </div>
                     </div>
                     <div>
-                        <div class="flex justify-between items-center mb-1"><label class="block text-[9px] md:text-[10px] font-bold text-gray-400">分攤人員與個別金額：</label></div>
+                        <div class="flex justify-between items-center mb-1"><label class="block text-[9px] md:text-[10px] font-bold text-gray-400">分攤人員與個別金額 (<span id="checkbox-currency-label" class="text-coral-500 font-bold">NT$</span>)：</label></div>
                         <div id="sharer-checkboxes-container" class="space-y-1.5 max-h-[180px] overflow-y-auto py-1"></div>
                     </div>
                     <div class="flex gap-2 pt-1">
@@ -216,11 +226,11 @@
                             <h4 class="font-serif text-xs font-semibold text-sand-800">📋 支出細目</h4>
                             <button onclick="clearExpenses()" class="text-[9px] font-bold text-gray-400 hover:text-rose-500 font-sans">全部清空</button>
                         </div>
-                        <div class="max-h-[200px] overflow-y-auto no-scrollbar"><ul id="expense-history-list" class="divide-y divide-sand-100"></ul></div>
+                        <div class="max-h-[220px] overflow-y-auto no-scrollbar"><ul id="expense-history-list" class="divide-y divide-sand-100"></ul></div>
                     </div>
                     <div class="bg-gradient-to-br from-white to-coral-50/20 rounded-2xl p-4 border border-coral-100 shadow-sm">
                         <h4 class="font-serif text-xs font-semibold text-sand-800 mb-2">✨ 最佳化轉帳結算</h4>
-                        <div class="max-h-[200px] overflow-y-auto no-scrollbar"><ul id="settlement-result-list" class="space-y-1.5"></ul></div>
+                        <div class="max-h-[220px] overflow-y-auto no-scrollbar"><ul id="settlement-result-list" class="space-y-1.5"></ul></div>
                     </div>
                 </div>
             </div>
@@ -327,13 +337,16 @@
         const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz0gDA9x1MFM-LrldA77EDlNXQmaGLbbz7mtSKAPrUjpDWRgKWdVCJzANFshXOzi3Cv/exec"; 
         const LOCAL_STORAGE_KEY = 'wanderlust_tokyo_standalone_v1';
 
+        // 目前輸入框所選擇的幣別狀態
+        let currentSelectedCurrency = "NT$";
+
         let appState = {
             lastUpdated: 0,
             activeDay: 1,
             header: { topTag: 'Princess Exhibition Tour 👸🏻🎨', title: 'Tokyo Art & Pingu', desc: '2026 東京特展 ✦ 企鵝咖啡廳與藝術漫遊' },
             sectionTitles: { itinerary: 'Collecting Moments', itinerarySub: 'Capturing the gentle side of life, one step at a time.', splitter: 'Track expenses', splitterSub: 'SMART DEBT RECONCILIATION', checklist: 'Note!!!', checklistSub: 'CHECKLIST & PACKING LIST' },
             members: ['芷嫻', '品元', '秉昱'],
-            expenses: [],
+            expenses: [], // 擴充：每一筆會自帶 currency 欄位
             packingList: [
                 { id: 201, text: '手帳本、輕便水彩與簽字筆 🖌️', checked: false },
                 { id: 202, text: '看展輕便小側背包 🎒', checked: false },
@@ -354,6 +367,25 @@
         let db = null;
         let useFirebase = false; 
         let isSyncing = false;
+
+        // 設定目前輸入面板的幣別
+        function setCurrency(cur) {
+            currentSelectedCurrency = cur;
+            const btnNtd = document.getElementById('currency-ntd');
+            const btnJpy = document.getElementById('currency-jpy');
+            
+            if (cur === 'NT$') {
+                btnNtd.className = "px-3 py-1 text-xs font-bold rounded-md bg-coral-500 text-white transition-all";
+                btnJpy.className = "px-3 py-1 text-xs font-bold rounded-md text-gray-400 transition-all";
+            } else {
+                btnNtd.className = "px-3 py-1 text-xs font-bold rounded-md text-gray-400 transition-all";
+                btnJpy.className = "px-3 py-1 text-xs font-bold rounded-md bg-coral-500 text-white transition-all";
+            }
+            
+            document.getElementById('input-currency-label').innerText = cur;
+            document.getElementById('checkbox-currency-label').innerText = cur;
+            autoDistributeIfEven();
+        }
 
         function renderHeaderTexts() {
             document.getElementById('display-top-tag').innerText = appState.header.topTag || 'Princess Exhibition Tour 👸🏻🎨';
@@ -481,6 +513,8 @@
                 list.innerHTML = `<li class="py-4 text-center text-[10px] text-gray-400 italic">暫時無開銷紀錄。</li>`; return;
             }
             appState.expenses.slice().reverse().forEach(exp => {
+                // 讀取該筆紀錄的幣別，若為空則相容舊資料預設 NT$
+                const currencySymbol = exp.currency || 'NT$';
                 list.innerHTML += `
                     <li class="py-2 flex justify-between items-center text-[11px] gap-2">
                         <div class="space-y-0.5 pr-1 flex-grow min-w-0">
@@ -488,7 +522,7 @@
                             <p class="text-gray-400 font-light truncate"><span class="text-coral-500 font-medium">${exp.payer}</span> 付 · ${exp.sharedWith.length}人分</p>
                         </div>
                         <div class="flex items-center gap-1.5 shrink-0 font-bold text-coral-500">
-                            <span>NT$ ${exp.amount.toLocaleString()}</span>
+                            <span>${currencySymbol} ${exp.amount.toLocaleString()}</span>
                             <button onclick="editExpenseItem(${exp.id})" class="text-gray-300 hover:text-coral-500 font-sans p-0.5">✏️</button>
                             <button onclick="removeExpense(${exp.id})" class="text-gray-300 hover:text-coral-500 font-bold text-sm p-0.5 font-sans">×</button>
                         </div>
@@ -496,50 +530,95 @@
             });
         }
 
+        // 核心智慧分帳優化：分別跑兩套矩陣結算（台幣、日幣分開優化）
         function calculateSettlement() {
             const resultList = document.getElementById('settlement-result-list'); resultList.innerHTML = '';
             if (appState.expenses.length === 0 || appState.members.length === 0) {
                 resultList.innerHTML = `<li class="py-4 text-center text-[10px] text-gray-400 italic font-light">無記帳數據。</li>`; return;
             }
-            let balances = {}; appState.members.forEach(m => balances[m] = 0);
+            
+            // 執行分開結算的引擎函式
+            let ntdTransactions = runSettlementEngineForCurrency('NT$');
+            let jpyTransactions = runSettlementEngineForCurrency('¥');
+            
+            if (ntdTransactions.length === 0 && jpyTransactions.length === 0) {
+                resultList.innerHTML = `<p class="text-xs text-center py-4 font-semibold text-emerald-600">全部金額皆已平帳！</p>`; return;
+            }
+            
+            // 渲染台幣結算結果
+            if (ntdTransactions.length > 0) {
+                resultList.innerHTML += `<div class="text-[10px] font-bold text-gray-400 px-1 pt-1">【NT$ 台幣結算】</div>`;
+                ntdTransactions.forEach(tx => {
+                    resultList.innerHTML += `<li class="bg-white border p-2 rounded-xl flex justify-between items-center text-xs shadow-sm gap-2 min-w-0">
+                        <div class="truncate"><span class="font-bold">${tx.from}</span> <span class="text-[10px] text-gray-400">應付給</span> <span class="font-bold">${tx.to}</span></div>
+                        <span class="font-bold text-coral-500 text-xs shrink-0">NT$ ${tx.amount.toLocaleString()}</span>
+                    </li>`;
+                });
+            }
+            
+            // 渲染日幣結算結果
+            if (jpyTransactions.length > 0) {
+                resultList.innerHTML += `<div class="text-[10px] font-bold text-ocean-600 px-1 pt-2">【¥ 日圓結算】</div>`;
+                jpyTransactions.forEach(tx => {
+                    resultList.innerHTML += `<li class="bg-white border p-2 rounded-xl flex justify-between items-center text-xs shadow-sm gap-2 min-w-0 border-ocean-100">
+                        <div class="truncate"><span class="font-bold">${tx.from}</span> <span class="text-[10px] text-gray-400">應付給</span> <span class="font-bold">${tx.to}</span></div>
+                        <span class="font-bold text-ocean-500 text-xs shrink-0">¥ ${tx.amount.toLocaleString()}</span>
+                    </li>`;
+                });
+            }
+        }
+
+        // 單一幣別結算矩陣計算核心
+        function runSettlementEngineForCurrency(targetCurrency) {
+            let balances = {}; 
+            appState.members.forEach(m => balances[m] = 0);
+            
             appState.expenses.forEach(exp => {
+                const expCurrency = exp.currency || 'NT$'; // 相容老資料
+                if (expCurrency !== targetCurrency) return; // 篩選非目標貨幣
+                
                 const payer = exp.payer;
                 const total = exp.amount;
                 const splitWith = exp.sharedWith;
                 if (splitWith.length === 0) return;
+                
                 if (balances[payer] !== undefined) balances[payer] += total;
                 if (exp.splitMode === 'custom') {
-                    for (let person in exp.customShares) { if (balances[person] !== undefined) balances[person] -= exp.customShares[person]; }
+                    for (let person in exp.customShares) { 
+                        if (balances[person] !== undefined) balances[person] -= exp.customShares[person]; 
+                    }
                 } else {
                     let share = total / splitWith.length;
-                    splitWith.forEach(person => { if (balances[person] !== undefined) balances[person] -= share; });
+                    splitWith.forEach(person => { 
+                        if (balances[person] !== undefined) balances[person] -= share; 
+                    });
                 }
             });
+            
             let debtors = [], creditors = [];
             for (let name in balances) {
                 const bal = balances[name];
                 if (bal < -0.1) debtors.push({ name: name, amount: -bal });
                 else if (bal > 0.1) creditors.push({ name: name, amount: bal });
             }
+            
             let transactions = [], i = 0, j = 0;
-            let dArray = debtors.map(item => ({ ...item })); let cArray = creditors.map(item => ({ ...item }));
+            let dArray = debtors.map(item => ({ ...item })); 
+            let cArray = creditors.map(item => ({ ...item }));
+            
             while (i < dArray.length && j < cArray.length) {
                 let debtor = dArray[i], creditor = cArray[j];
                 let settleAmount = Math.min(debtor.amount, creditor.amount);
                 
-                if (settleAmount > 0.5) transactions.push({ from: debtor.name, to: creditor.name, amount: Math.round(settleAmount) });
-                debtor.amount -= settleAmount; creditor.amount -= settleAmount;
-                if (debtor.amount <= 0.5) i++; if (creditor.amount <= 0.5) j++;
+                if (settleAmount > 0.5) {
+                    transactions.push({ from: debtor.name, to: creditor.name, amount: Math.round(settleAmount) });
+                }
+                debtor.amount -= settleAmount; 
+                creditor.amount -= settleAmount;
+                if (debtor.amount <= 0.5) i++; 
+                if (creditor.amount <= 0.5) j++;
             }
-            if (transactions.length === 0) {
-                resultList.innerHTML = `<p class="text-xs text-center py-4 font-semibold text-emerald-600">金額已平帳！</p>`; return;
-            }
-            transactions.forEach(tx => {
-                resultList.innerHTML += `<li class="bg-white border p-2 rounded-xl flex justify-between items-center text-xs shadow-sm gap-2 min-w-0">
-                    <div class="truncate"><span class="font-bold">${tx.from}</span> <span class="text-[10px] text-gray-400">應付給</span> <span class="font-bold">${tx.to}</span></div>
-                    <span class="font-bold text-coral-500 text-xs shrink-0">NT$ ${tx.amount.toLocaleString()}</span>
-                </li>`;
-            });
+            return transactions;
         }
 
         function renderTodo(type) {
@@ -690,7 +769,12 @@
                 }
                 if (cloudData.expenses) {
                     appState.expenses = cloudData.expenses.map(exp => ({
-                        id: Number(exp.ID), purpose: exp.Purpose, amount: Number(exp.Amount), payer: exp.Payer, sharedWith: exp.SharedWith ? exp.SharedWith.split(",") : []
+                        id: Number(exp.ID), 
+                        purpose: exp.Purpose, 
+                        amount: Number(exp.Amount), 
+                        payer: exp.Payer, 
+                        sharedWith: exp.SharedWith ? exp.SharedWith.split(",") : [],
+                        currency: exp.Currency || 'NT$' // 解析雲端幣別欄位
                     }));
                 }
                 if (cloudData.checklist) {
@@ -806,11 +890,23 @@
             document.querySelectorAll('.sharer-cb:checked').forEach(cb => {
                 sw.push(cb.value); cs[cb.value] = Math.round(parseFloat(document.getElementById(`custom-amount-${cb.value}`).value)) || 0;
             });
-            const expData = { id: Date.now(), purpose: p, amount: a, payer: document.getElementById('expense-payer').value, splitMode: document.getElementById('expense-split-mode').value, customShares: cs, sharedWith: sw };
+            
+            // 寫入包含當前貨幣幣別的物件
+            const expData = { 
+                id: Date.now(), 
+                purpose: p, 
+                amount: a, 
+                payer: document.getElementById('expense-payer').value, 
+                splitMode: document.getElementById('expense-split-mode').value, 
+                customShares: cs, 
+                sharedWith: sw,
+                currency: currentSelectedCurrency // 儲存該筆貨幣種類 
+            };
             appState.expenses.push(expData); updateAndSave(); cancelExpenseEdit(); renderAll();
         }
         function cancelExpenseEdit() {
             document.getElementById('expense-purpose').value = ''; document.getElementById('expense-amount').value = '';
+            setCurrency('NT$'); // 重置回台幣
             renderSharerCheckboxes();
         }
         function editExpenseItem(id) {
@@ -819,6 +915,10 @@
             document.getElementById('expense-amount').value = exp.amount;
             document.getElementById('expense-payer').value = exp.payer;
             document.getElementById('expense-split-mode').value = exp.splitMode || 'even';
+            
+            // 還原當初儲存的貨幣
+            setCurrency(exp.currency || 'NT$');
+            
             appState.expenses = appState.expenses.filter(e => e.id !== id);
             renderSharerCheckboxes();
             document.querySelectorAll('.sharer-cb').forEach(cb => cb.checked = exp.sharedWith.includes(cb.value));
